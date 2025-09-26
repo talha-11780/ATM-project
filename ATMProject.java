@@ -1,8 +1,9 @@
 package com.mycompany.mavenproject1;
 import java.util.Scanner;
 public class ATMProject {
-    private static final int PIN=1234;
+    private static String PIN;
     private static long balance=0;
+    public static boolean loggedin=false;
     public static void deposit(long amount){
         if(amount>0){
             balance+=amount;
@@ -30,11 +31,45 @@ public class ATMProject {
     public static void main(String[] args) {
        int choice;
         Scanner sc=new Scanner(System.in);
-        boolean loggedin=false;
+        while(true){
+        System.out.print("Enter the pin you want to set: ");
+        String pinn=sc.nextLine();
+        boolean hasLetters=false;
+        boolean hasDigits=false;
+        boolean hasSpecials=false; 
+        int l=pinn.length();
+        for(int i=0;i<l;i++){
+            char ch=pinn.charAt(i);
+            if(Character.isLetter(ch)){
+            hasLetters=true;
+        }
+            else if(Character.isDigit(ch)){
+        hasDigits=true;
+    }
+            else if("~`!@#$%^&*()-_+={}[]:;'<,>.?/.|".indexOf(ch)!=-1){
+            hasSpecials=true;
+            }
+        }
+        
+        if(hasLetters || hasSpecials){
+            System.out.println("Invalid pin format.Try again...");
+        }
+        else if(l<4 || l>4){
+            System.out.println("Invalid fromat.Try again..."); 
+        }
+        else if(hasDigits && l==4){
+            if(!(hasLetters && hasSpecials)){
+            PIN=pinn;
+            System.out.println("Pin successfully set");
+            break;
+            }
+        }
+        }
+        
         for(int attempts=3;attempts>0;attempts--){
             System.out.print("Enter pin:");
-            int enteredPin=sc.nextInt();
-            if(PIN==enteredPin){
+            String enteredPin=sc.nextLine();
+            if(PIN.equals(enteredPin)){
                 System.out.println("Login successfull!");
                 loggedin=true;
                  break;
